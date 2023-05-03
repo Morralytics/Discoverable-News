@@ -23,7 +23,7 @@ Since Python is a popular alternative to Node.js, I will be learning this alongs
 
 Python is a great alternative that has many built in modules that can be imported and called upon in a variety of situations. The technology I ended up making use of the most was Python's ORM tool called SQLAlchemy which is what created my models and use the global Session object to perform the necessary CRUD operations.
 
-## Update
+## * **Update** *
 
 This application is a copy of a previous project that is refactored in React. To serve as a challenge I am developing this piece of code to run under the React Frontend framework while utilizing Python in the backend. Since the backend has already been mostly built by myself, I simply need to make sure they run together smoothly and alter the element rendering.
 
