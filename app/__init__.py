@@ -1,7 +1,10 @@
 from app.routes import home, dashboard, api
+from app.db import get_db
 from app.db import init_db
+from app.models import Post
 # from app.utils import filters
-from flask import Flask
+from flask import Flask, jsonify
+from flask_marshmallow import Marshmallow
 
 # def create_app(test_config=None):
   # app = Flask(__name__, static_url_path='/')
@@ -29,7 +32,7 @@ def create_app(test_config=None):
     SECRET_KEY='discovery_secret_key'
   )
 
-  app.register_blueprint(home)
+  # app.register_blueprint(home)
 
   @app.route('/tests')
   def test():
@@ -39,5 +42,19 @@ def create_app(test_config=None):
     app.run(debug=True)
 
   init_db(app)
+  ma = Marshmallow(app)
+
+  class PostSchema(ma.ModelSchema):
+    class Meta:
+      model = Post
+      load_instance = True
+
+  @app.route('/')
+  def index():
+      db = get_db()
+      posts = db.query(Post).order_by(Post.created_at.desc()).all()
+      post_schema = PostSchema()
+      output = post_schema.dumb(posts).data
+      return jsonify({'posts' : output})
 
   return app
