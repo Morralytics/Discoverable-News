@@ -1,5 +1,5 @@
-# from app.routes import home, dashboard, api
-# from app.db import init_db
+from app.routes import home, dashboard, api
+from app.db import init_db
 # from app.utils import filters
 from flask import Flask
 
@@ -22,11 +22,22 @@ from flask import Flask
   # init_db(app)
 
   # return app
-app = Flask(__name__, static_url_path='/')
+def create_app(test_config=None):
+  app = Flask(__name__, static_url_path='/')
+  app.url_map.strict_slashes = False
+  app.config.from_mapping(
+    SECRET_KEY='discovery_secret_key'
+  )
 
-@app.route('/tests')
-def test():
-  return {"tests":["Test1", "Test2", "Test3"]}
-  
-if __name__ == "__main__":
-  app.run(debug=True)
+  app.register_blueprint(home)
+
+  @app.route('/tests')
+  def test():
+    return {"tests":["Test1", "Test2", "Test3"]}
+    
+  if __name__ == "__main__":
+    app.run(debug=True)
+
+  init_db(app)
+
+  return app
